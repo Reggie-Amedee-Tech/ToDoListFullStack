@@ -14,7 +14,8 @@ app.use(cors());
 
 app.use('/api', routes);
 
-const uri: string = process.env.REACT_APP_API_KEY;
+
+const uri: string = process.env.REACT_APP_API_KEY ?? 'API KEY NOT FOUND'
 
 mongoose.connect(uri)
 .then(() => {

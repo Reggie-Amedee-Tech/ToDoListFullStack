@@ -12,6 +12,18 @@ const getAllTodos = async(req: Request, res: Response): Promise<void> => {
     }
 }
 
+const getOneToDo = async(req: Request, res: Response): Promise<void> => {
+    try {
+        const oneToDo: ToDo[] | null = await ToDoModel.findOne({_id: req.params.id})
+        console.log(oneToDo)
+        res.status(201).json({message: "ToDo Found", toDo: oneToDo})
+    }
+    catch (error) {
+        res.status(500).json({message: "Can't find todo with that id", error})
+    }
+
+}
+
 const addToDos = async(req: Request, res: Response): Promise<void> => {
     try {
         const body = req.body as Pick<ToDo, 'name' | 'description' | 'status'>
@@ -59,4 +71,4 @@ const deleteTodo = async (req: Request, res: Response): Promise<void> => {
     }
 }
 
-export {getAllTodos, addToDos, updateTodo, deleteTodo}
+export {getAllTodos, addToDos, updateTodo, deleteTodo, getOneToDo}

@@ -13,7 +13,6 @@ const CreateTodo: React.FC = () => {
         setName(name)
         setDescription(description)
         setStatus(status)
-        console.log(name, description, status)
 
         axios.post('http://localhost:5000/api/add-todo', {
             name: name,

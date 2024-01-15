@@ -26,27 +26,30 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const axios_1 = __importDefault(require("axios"));
 const react_1 = __importStar(require("react"));
+const axios_1 = __importDefault(require("axios"));
 const react_router_dom_1 = require("react-router-dom");
-const AllToDos = () => {
-    const [allTodos, setAllTodos] = (0, react_1.useState)([]);
+const SelectedToDo = props => {
+    const [loading, setLoading] = (0, react_1.useState)(false);
+    const [selectedToDo, setSelectedToDo] = (0, react_1.useState)([]);
+    const location = (0, react_router_dom_1.useParams)();
     (0, react_1.useEffect)(() => {
-        axios_1.default.get('http://localhost:5000/api/all-todos')
+        axios_1.default.get(`http://localhost:5000/api/${location.id}`)
             .then(res => {
-            console.log(res.data);
-            setAllTodos([res.data]);
+            setSelectedToDo([res.data.toDo]);
+            setLoading(true);
         })
             .catch(err => {
             console.log(err.message);
         });
     }, []);
-    console.log(allTodos);
-    return react_1.default.createElement("div", null, allTodos.map(data => {
-        return data.toDos.map(d => {
-            return react_1.default.createElement("div", null,
-                react_1.default.createElement(react_router_dom_1.Link, { to: d._id, state: { id: d._id } }, d.name));
-        });
-    }));
+    console.log(selectedToDo);
+    return react_1.default.createElement("div", null, !loading ? react_1.default.createElement("p", null, "Loading...") : react_1.default.createElement("div", null, selectedToDo.map(data => {
+        return react_1.default.createElement("div", null,
+            react_1.default.createElement("h1", null, data.name),
+            react_1.default.createElement("h2", null, data.description),
+            react_1.default.createElement("h3", null, data.status),
+            react_1.default.createElement(react_router_dom_1.Link, { to: "edit" }, "Edit"));
+    })));
 };
-exports.default = AllToDos;
+exports.default = SelectedToDo;

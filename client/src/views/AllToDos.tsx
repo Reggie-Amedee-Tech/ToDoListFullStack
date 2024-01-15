@@ -1,6 +1,7 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import {AllToDosType} from '../types/AllToDosType'
+import { Link } from "react-router-dom";
 
 const AllToDos: React.FC = () => {
     const [allTodos, setAllTodos] = useState<AllToDosType[]>([])
@@ -23,9 +24,7 @@ const AllToDos: React.FC = () => {
         {allTodos.map(data => {
             return data.toDos.map(d => {
                 return <div>
-                    <p>{d.name}</p>
-                    <p>{d.description}</p>
-                    <p>{d.status}</p>
+                    <Link to={d._id} state={{id: d._id}}>{d.name}</Link>
                 </div>
             })
         })}

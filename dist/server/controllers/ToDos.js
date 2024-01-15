@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteTodo = exports.updateTodo = exports.addToDos = exports.getAllTodos = void 0;
+exports.getOneToDo = exports.deleteTodo = exports.updateTodo = exports.addToDos = exports.getAllTodos = void 0;
 const ToDoModel_1 = __importDefault(require("../models/ToDoModel"));
 const getAllTodos = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -24,6 +24,17 @@ const getAllTodos = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
     }
 });
 exports.getAllTodos = getAllTodos;
+const getOneToDo = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const oneToDo = yield ToDoModel_1.default.findOne({ _id: req.params.id });
+        console.log(oneToDo);
+        res.status(201).json({ message: "ToDo Found", toDo: oneToDo });
+    }
+    catch (error) {
+        res.status(500).json({ message: "Can't find todo with that id", error });
+    }
+});
+exports.getOneToDo = getOneToDo;
 const addToDos = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const body = req.body;
