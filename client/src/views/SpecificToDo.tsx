@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useNavigate } from "react-router-dom";
 import { SpecificToDo } from "../types/SpecificToDoType";
 
 
@@ -9,6 +9,7 @@ const SelectedToDo: React.FC = props => {
     const [loading, setLoading] = useState<Boolean>(false);
     const [selectedToDo, setSelectedToDo] = useState<SpecificToDo[]>([]);
     const location = useParams();
+    const navigate = useNavigate();
 
     useEffect(() => {
         axios.get(`http://localhost:5000/api/${location.id}`)
@@ -21,7 +22,20 @@ const SelectedToDo: React.FC = props => {
         })
     }, [])
 
-    console.log(selectedToDo)
+    const deleteTodo = (event: React.FormEvent) => {
+        event.preventDefault();
+
+        axios.delete(`http://localhost:5000/api/delete-todo/${location.id}`)
+        .then(res => {
+            console.log(res)
+            navigate('/allTodos')
+        })
+        .catch(err => {
+            console.log(err)
+        })
+    }
+
+    console.log(selectedToDo, location)
 
     return <div>
         {!loading ? <p>Loading...</p> : <div>
@@ -31,6 +45,9 @@ const SelectedToDo: React.FC = props => {
                     <h2>{data.description}</h2>
                     <h3>{data.status}</h3>
                     <Link to={"edit"}>Edit</Link>
+                    <button onClick={(e) => {
+                        deleteTodo(e)
+                    }}>Delete Button</button>
                 </div>
             })}
             </div>}
