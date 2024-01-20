@@ -1,0 +1,9 @@
+.Alltodos-container {
+    border: 1px solid red;
+}
+
+.todos-container {
+    display: flex;
+    flex-direction: row;
+    
+}

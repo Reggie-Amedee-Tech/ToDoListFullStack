@@ -30,7 +30,7 @@ const addToDos = async(req: Request, res: Response): Promise<void> => {
         const todo: ToDo = new ToDoModel({
             name: body.name,
             description: body.description,
-            status: body.status
+            status: "Started"
         })
 
         const newToDo: ToDo = await todo.save();
@@ -60,6 +60,7 @@ const updateTodo = async(req: Request, res: Response): Promise<void> => {
     }
 }
 
+
 const deleteTodo = async (req: Request, res: Response): Promise<void> => {
     try {
         const deletedTodo: ToDo | null = await ToDoModel.findByIdAndDelete(req.params.id);
@@ -71,4 +72,4 @@ const deleteTodo = async (req: Request, res: Response): Promise<void> => {
     }
 }
 
-export {getAllTodos, addToDos, updateTodo, deleteTodo, getOneToDo}
+export {getAllTodos, addToDos, updateTodo, deleteTodo, getOneToDo,}

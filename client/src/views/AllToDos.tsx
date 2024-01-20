@@ -1,35 +1,15 @@
-import axios from "axios";
-import React, { useEffect, useState } from "react";
-import {AllToDosType} from '../types/AllToDosType'
-import { Link } from "react-router-dom";
+import InProgress from './InProgress'
+import StartedToDo from './StartedToDo'
+import '../styles/AllTodos.css'
 
-const AllToDos: React.FC = () => {
-    const [allTodos, setAllTodos] = useState<AllToDosType[]>([])
+const AllTodos: React.FC = () => {
 
-    useEffect(() => {
-        axios.get('http://localhost:5000/api/all-todos')
-        .then(res => {
-            console.log(res.data)
-            setAllTodos([res.data])
-            
-        })
-        .catch(err => {
-            console.log(err.message)
-        })
-    }, [])
-
-    console.log(allTodos)
-
-    return <div>
-        {allTodos.map(data => {
-            return data.toDos.map(d => {
-                return <div>
-                    <Link to={d._id} state={{id: d._id}}>{d.name}</Link>
-                </div>
-            })
-        })}
-
+    return <div className='Alltodos-container'>
+        <div className='todos-container'>
+        <InProgress/>
+        <StartedToDo/>
+        </div>
     </div>
 }
 
-export default AllToDos;
+export default AllTodos;

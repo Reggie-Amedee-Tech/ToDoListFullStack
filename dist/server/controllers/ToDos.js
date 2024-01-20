@@ -41,7 +41,7 @@ const addToDos = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         const todo = new ToDoModel_1.default({
             name: body.name,
             description: body.description,
-            status: body.status
+            status: "Started"
         });
         const newToDo = yield todo.save();
         const allToDos = yield ToDoModel_1.default.find();

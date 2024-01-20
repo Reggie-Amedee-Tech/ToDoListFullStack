@@ -5,7 +5,6 @@ import axios from 'axios';
 const UpdateToDo: React.FC = () => {
     const [name, setName] = useState<string>("");
     const [description, setDescription] = useState<string>("");
-    const [status, setStatus] = useState<string>("");
 
     const navigate = useNavigate();
 
@@ -16,7 +15,6 @@ const UpdateToDo: React.FC = () => {
         .then(res => {
             setName(res.data.toDo.name)
             setDescription(res.data.toDo.description)
-            setStatus(res.data.toDo.status)
         })
         .catch( err => {
             console.log(err)
@@ -29,11 +27,11 @@ const UpdateToDo: React.FC = () => {
         axios.put(`http://localhost:5000/api/edit-todo/${location.id}`, {
             name: name,
             description: description,
-            status: status
+            
         })
         .then(res => {
             console.log(res)
-            navigate('/allTodos')
+            navigate('/')
         })
         .catch(err => {
             console.log(err)
@@ -46,7 +44,7 @@ const UpdateToDo: React.FC = () => {
         <form>
             <input type="text" value={name} onChange={(e) => setName(e.target.value)}/>
             <input type="text" value={description} onChange={(e) => setDescription(e.target.value)}/>
-            <input type="text" value={status} onChange={(e) => setStatus(e.target.value)}/>
+            
             <button type="submit" onClick={(e) => {
                 onSubmitHandler(e)
             }}>Update ToDo</button>

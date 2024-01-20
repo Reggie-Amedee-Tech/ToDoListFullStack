@@ -29,15 +29,18 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const react_1 = __importStar(require("react"));
 const axios_1 = __importDefault(require("axios"));
 const react_router_dom_1 = require("react-router-dom");
+const ProjectStatus = ['Started', 'In Progress', 'Completed'];
 const SelectedToDo = props => {
     const [loading, setLoading] = (0, react_1.useState)(false);
     const [selectedToDo, setSelectedToDo] = (0, react_1.useState)([]);
+    const [status, setStatus] = (0, react_1.useState)("");
     const location = (0, react_router_dom_1.useParams)();
     const navigate = (0, react_router_dom_1.useNavigate)();
     (0, react_1.useEffect)(() => {
         axios_1.default.get(`http://localhost:5000/api/${location.id}`)
             .then(res => {
             setSelectedToDo([res.data.toDo]);
+            setStatus(res.data.toDo.status);
             setLoading(true);
         })
             .catch(err => {
@@ -49,22 +52,40 @@ const SelectedToDo = props => {
         axios_1.default.delete(`http://localhost:5000/api/delete-todo/${location.id}`)
             .then(res => {
             console.log(res);
-            navigate('/allTodos');
+            navigate('/');
         })
             .catch(err => {
             console.log(err);
         });
     };
-    console.log(selectedToDo, location);
+    const changeStatus = (event) => {
+        event.preventDefault();
+        axios_1.default.put(`http://localhost:5000/api/edit-todo/${location.id}`, {
+            status: status
+        })
+            .then(res => {
+            console.log(res);
+        })
+            .catch(error => {
+            console.log(error.message);
+        });
+    };
+    console.log(status);
     return react_1.default.createElement("div", null, !loading ? react_1.default.createElement("p", null, "Loading...") : react_1.default.createElement("div", null, selectedToDo.map(data => {
         return react_1.default.createElement("div", null,
             react_1.default.createElement("h1", null, data.name),
             react_1.default.createElement("h2", null, data.description),
             react_1.default.createElement("h3", null, data.status),
+            react_1.default.createElement("select", { name: "status", id: "status", value: status, onChange: (e) => setStatus(e.target.value) }, ProjectStatus.map((d, i) => {
+                return react_1.default.createElement("option", { key: i }, d);
+            })),
             react_1.default.createElement(react_router_dom_1.Link, { to: "edit" }, "Edit"),
             react_1.default.createElement("button", { onClick: (e) => {
                     deleteTodo(e);
-                } }, "Delete Button"));
+                } }, "Delete Button"),
+            react_1.default.createElement("button", { onClick: (e) => {
+                    changeStatus(e);
+                } }, "UpdateStatus"));
     })));
 };
 exports.default = SelectedToDo;

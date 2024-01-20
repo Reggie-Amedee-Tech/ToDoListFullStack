@@ -28,10 +28,15 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const react_1 = __importStar(require("react"));
 const axios_1 = __importDefault(require("axios"));
+require("../styles/CreateToDo.css");
+var ProjectStatus;
+(function (ProjectStatus) {
+    ProjectStatus["Started"] = "Started";
+})(ProjectStatus || (ProjectStatus = {}));
 const CreateTodo = () => {
     const [name, setName] = (0, react_1.useState)("");
     const [description, setDescription] = (0, react_1.useState)("");
-    const [status, setStatus] = (0, react_1.useState)("");
+    const [status, setStatus] = (0, react_1.useState)(ProjectStatus.Started);
     const submitTodo = (event) => {
         event.preventDefault();
         setName(name);
@@ -49,16 +54,15 @@ const CreateTodo = () => {
             console.log(err.message);
         });
     };
-    return react_1.default.createElement("div", null,
-        react_1.default.createElement("form", { action: "" },
-            react_1.default.createElement("input", { type: "text", value: name, onChange: (e) => setName(e.target.value) }),
-            react_1.default.createElement("input", { type: "text", value: description, onChange: (e) => setDescription(e.target.value) }),
-            react_1.default.createElement("input", { type: "text", value: status, onChange: (e) => setStatus(e.target.value) }),
-            react_1.default.createElement("button", { type: "submit", onClick: (e) => {
-                    submitTodo(e);
-                    setName('');
-                    setDescription('');
-                    setStatus('');
-                } }, "Submit Item")));
+    return react_1.default.createElement("div", { className: "Create-Component-Container" },
+        react_1.default.createElement("div", { className: "Form-Container" },
+            react_1.default.createElement("form", { action: "" },
+                react_1.default.createElement("input", { type: "text", value: name, onChange: (e) => setName(e.target.value) }),
+                react_1.default.createElement("input", { type: "text", value: description, onChange: (e) => setDescription(e.target.value) }),
+                react_1.default.createElement("button", { type: "submit", onClick: (e) => {
+                        submitTodo(e);
+                        setName('');
+                        setDescription('');
+                    } }, "Submit Item"))));
 };
 exports.default = CreateTodo;

@@ -26,44 +26,26 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+const axios_1 = __importDefault(require("axios"));
 const react_1 = __importStar(require("react"));
 const react_router_dom_1 = require("react-router-dom");
-const axios_1 = __importDefault(require("axios"));
-const UpdateToDo = () => {
-    const [name, setName] = (0, react_1.useState)("");
-    const [description, setDescription] = (0, react_1.useState)("");
-    const navigate = (0, react_router_dom_1.useNavigate)();
-    const location = (0, react_router_dom_1.useParams)();
+const AllToDos = () => {
+    const [allTodos, setAllTodos] = (0, react_1.useState)([]);
     (0, react_1.useEffect)(() => {
-        axios_1.default.get(`http://localhost:5000/api/${location.id}`)
+        axios_1.default.get('http://localhost:5000/api/all-todos')
             .then(res => {
-            setName(res.data.toDo.name);
-            setDescription(res.data.toDo.description);
+            console.log(res.data);
+            setAllTodos([res.data]);
         })
             .catch(err => {
-            console.log(err);
+            console.log(err.message);
         });
     }, []);
-    const onSubmitHandler = (event) => {
-        event.preventDefault();
-        axios_1.default.put(`http://localhost:5000/api/edit-todo/${location.id}`, {
-            name: name,
-            description: description,
-        })
-            .then(res => {
-            console.log(res);
-            navigate('/');
-        })
-            .catch(err => {
-            console.log(err);
+    return react_1.default.createElement("div", null, allTodos.map(data => {
+        return data.toDos.filter(d => d.status === "In Progress").map(filteredTodo => {
+            return react_1.default.createElement("div", null,
+                react_1.default.createElement(react_router_dom_1.Link, { to: filteredTodo._id, state: { id: filteredTodo._id } }, filteredTodo.name));
         });
-    };
-    return react_1.default.createElement("div", null,
-        react_1.default.createElement("form", null,
-            react_1.default.createElement("input", { type: "text", value: name, onChange: (e) => setName(e.target.value) }),
-            react_1.default.createElement("input", { type: "text", value: description, onChange: (e) => setDescription(e.target.value) }),
-            react_1.default.createElement("button", { type: "submit", onClick: (e) => {
-                    onSubmitHandler(e);
-                } }, "Update ToDo")));
+    }));
 };
-exports.default = UpdateToDo;
+exports.default = AllToDos;
